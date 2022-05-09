@@ -7,51 +7,105 @@
  */
 let lineNo = 1;
 
-function draw(side1, side2, side3) {
-	var canvas = document.getElementById("tutorial");
-	if (canvas.getContext) {
-		var ctx = canvas.getContext("2d");
-		ctx.beginPath();
-		ctx.moveTo(0, 0);
-		ctx.lineTo(0, side1);
-		ctx.lineTo(side2, 0);
-		ctx.lineTo(0, side3);
-		ctx.fillStyle = "rgb(200,0,180)";
-		ctx.fill();
-	}
-};
-
-function Area33(R1,R2,R3) {
+function draw(R1,R2,R3) {
 	var canvas = document.getElementById('canvas');
     var ctx = canvas.getContext('2d');
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	//---------------------
+	var width = canvas.width;
+	var height = canvas.height;
     //---------------------
-	if (R1 < 11 && R2 < 11 && R3 < 11) {
-		R1 = R1 * 8;
-		R2 = R2 * 8;
-		R3 = R3 * 8;
-	} else if (R1 < 20 && R2 < 20 && R3 < 20) {
-		R1 = R1 * 4;
-		R2 = R2 * 4;
-		R3 = R3 * 4;
+	// make bottom the largest value
+	var right = R1;
+	var left = R2;
+	var bottom = R3;
+	//--------------------
+	if (R2 > R1) {
+		// left bigger than right
+		if (R2 > R3) {
+			// left bigger than bottom
+			left = R1;
+			bottom = R2;
+			right = R3;
+		} else {
+			// bottom the biggest
+		}
+	} else {
+		// right bigger than left
+		if (R1 > R3) {
+			// right bigger than bottom
+			bottom = R1;
+			right = R2;
+			left = R3;
+		} else {
+			// bottom the biggest
+		}
+	}
+	//---------------------
+	R3 = bottom;
+	R2 = left;
+	R1 = right;
+	//---------------------
+	ctx.clearRect(0, 0, width, height);
+	//---------------------
+	$("#R1").val(R1);
+	$("#R2").val(R2);
+	$("#R3").val(R3);
+	//---------------------
+	var ra = R3 / 280;
+
+	if (ra > 1) {
+		R3 = 280;
+		R2 = R2 / ra;
+		R1 = R1 / ra;
+	} else {
+		R3 = 280;
+		R2 = R2 / ra;
+		R1 = R1 / ra;
+	}
+	//---------------------
+	var ra1 = R2 / 100;
+	if (ra1 > 1) {
+		R2 = 100;
+		R1 = R1 / ra1;
+		R3 = R3 / ra1;
+	} else {
+		R2 = 100;
+		R1 = R1 / ra1;
+		R3 = R3 / ra1;
+	}
+	//---------------------
+	/*
+	if (R1 > 900 || R2 > 900 || R3 > 900) {
+		R1 = R1 / 10;
+		R2 = R2 / 10;
+		R3 = R3 / 10;
+	} else if (R1 > 200 || R2 > 200 || R3 > 200) {
+		R1 = R1 / 4;
+		R2 = R2 / 4;
+		R3 = R3 / 4;
 	} else if (R1 < 70 && R2 < 70 && R3 < 70) {
 		R1 = R1 * 2;
 		R2 = R2 * 2;
 		R3 = R3 * 2;
-	} else if (R1 > 200 && R2 > 200 && R3 > 200) {
-		R1 = R1 / 4;
-		R2 = R2 / 4;
-		R3 = R3 / 4;
-	}
+	} else if (R1 < 20 && R2 < 20 && R3 < 20) {
+		R1 = R1 * 4;
+		R2 = R2 * 4;
+		R3 = R3 * 4;
+	} else if (R1 < 11 && R2 < 11 && R3 < 11) {
+		R1 = R1 * 8;
+		R2 = R2 * 8;
+		R3 = R3 * 8;
+	}*/
     //---------------------
     var Ax=0, Ay=0;
     var Bx=R3, By=0;
     var Cx=(R2*R1+R3*R3-R1*R1)/(2*R3);
     var Cy=Math.sqrt(R2*R2-Cx*Cx);
+    var Ox = width / 2 - Bx/2;
+    var Oy = height / 2 + Cy/2;
+	//-----------------------
 
-    var Ox = canvas.width / 2 - Bx/2;
-    var Oy = canvas.height / 2 + Cy/2;
-
+	//-----------------------
     ctx.beginPath();
     ctx.moveTo(Ox+Ax, Oy-Ay);
     ctx.lineTo(Ox+Bx, Oy-By);
@@ -61,7 +115,14 @@ function Area33(R1,R2,R3) {
 	ctx.lineWidth=2;
     ctx.stroke(); 
 	ctx.fill();
+	//-----------------------
+	//-----------------------
 };
+/*
+function scale_draw() {
+	// to scale the canvas to the frame height=100 width=300
+		
+};*/
 
 function subval(val) {
 	val = val.toString();
@@ -76,8 +137,8 @@ function Area() { // parseFloat // parseInt
 	var side2 = parseFloat(document.getElementById("side2").value);
 	var side3 = parseFloat(document.getElementById("side3").value);
      
-	Area33(side1,side2,side3);
-
+	draw(side1,side2,side3);
+	// scale_draw();
 	// console.log(typeof(side1));
 
 	var s = (side1 + side2 + side3) / 2;
