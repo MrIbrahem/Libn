@@ -63,6 +63,14 @@ function Area33(R1,R2,R3) {
 	ctx.fill();
 };
 
+function subval(val) {
+	val = val.toString();
+    if (val.indexOf(".") > -1) {
+        val = val.split(".")[0] + "." + val.split(".")[1].substring(0, 6);
+    }
+	return val;
+};
+
 function Area() { // parseFloat // parseInt
 	var side1 = parseFloat(document.getElementById("side1").value);
 	var side2 = parseFloat(document.getElementById("side2").value);
@@ -77,8 +85,8 @@ function Area() { // parseFloat // parseInt
 	var area_m = Math.sqrt(s * ((s - side1) * (s - side2) * (s - side3)));
 	var area_l = area_m / 44.44;
 
-	area_l = area_l.toString().substring(0, 6)
-	area_m = area_m.toString().substring(0, 6)
+	area_l = subval(area_l);
+	area_m = subval(area_m);
 
 	document.getElementById("display_m").innerHTML = area_m;
 	document.getElementById("display_l").innerHTML = area_l;
@@ -115,11 +123,14 @@ function AddToAll() {
 	var display_m = parseFloat(display_m);
 
 	var me = display_m + allm;
-	me = me.toString().substring(0, 6)
+	me = subval(me);
+	
 	document.getElementById("allm").innerHTML = me;
 
 	var alll = me / 44.44;
-	alll = alll.toString().substring(0, 6)
+	
+	alll = subval(alll);
+	
 	document.getElementById("alll").innerHTML = alll;
 
 	document.getElementById("side1").value = '';
