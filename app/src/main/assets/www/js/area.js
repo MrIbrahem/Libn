@@ -164,6 +164,7 @@ function Area() { // parseFloat // parseInt
 		tableBody = $("#allrows tbody");
 		tableBody.append(markup);
 		lineNo++;
+		log_to_db(lineNo, side1, side2, side3, area_m, area_l);
 	}
 	//---------
 };
